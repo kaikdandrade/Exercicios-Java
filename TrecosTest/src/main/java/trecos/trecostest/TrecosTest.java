@@ -1,9 +1,9 @@
 package trecos.trecostest;
 
-import trecos.calculator.Calculator;
-import trecos.calculator.DateToFormat;
-import trecos.calculator.MultiTable;
-import trecos.calculator.Validator;
+import trecos.exercicios.Calculator;
+import trecos.exercicios.DateToFormat;
+import trecos.exercicios.MultiTable;
+import trecos.exercicios.Validator;
 
 public class TrecosTest {
 

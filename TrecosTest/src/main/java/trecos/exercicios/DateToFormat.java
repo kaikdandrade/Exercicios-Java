@@ -1,4 +1,4 @@
-package trecos.calculator;
+package trecos.exercicios;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

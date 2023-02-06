@@ -1,4 +1,4 @@
-package trecos.calculator;
+package trecos.exercicios;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

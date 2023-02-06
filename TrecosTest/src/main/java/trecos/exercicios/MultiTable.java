@@ -1,4 +1,4 @@
-package trecos.calculator;
+package trecos.exercicios;
 
 import javax.swing.JOptionPane;
 

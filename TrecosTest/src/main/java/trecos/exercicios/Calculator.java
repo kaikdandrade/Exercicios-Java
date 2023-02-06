@@ -1,4 +1,4 @@
-package trecos.calculator;
+package trecos.exercicios;
 
 public final class Calculator {
     
