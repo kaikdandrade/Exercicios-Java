@@ -1,17 +1,20 @@
 package trecos.exercicios;
 
-import javax.swing.JOptionPane;
-
 public class MultiTable {
-    Calculator calc = new Calculator();
-    
-    public MultiTable(int n1) {
-        if(n1 <= 0 || n1 > 9) {
-            JOptionPane.showConfirmDialog(null, "Erro! Número escolhi inválido!", "Oooops!!!", JOptionPane.ERROR_MESSAGE);
-        } else {
-            for(int i = 2; i <= 10; i++) {
-                System.out.println(n1 + " x " + i + " = " + calc.mul(i, n1));
+
+    public static void table(int n1) {
+        for(int i = 0; i <= 10; i++) {
+
+        }
+    }
+
+    public static void tableAll() {
+        for(int i = 0; i <= 10; i++) {
+            for(int ii = 0; ii <= 10; ii++) {
+                System.out.println(i + " x " + ii + " = " + (i * ii));
             }
+            
+            System.out.println("-".repeat(100));
         }
     }
 }

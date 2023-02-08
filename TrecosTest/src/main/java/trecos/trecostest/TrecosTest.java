@@ -7,26 +7,33 @@ import trecos.exercicios.Validator;
 
 public class TrecosTest {
 
-    public void exerc1_2() {
-        Calculator calc = new Calculator();
-        System.out.println(calc.sum(5, 2));
-        System.out.println(calc.sub(9, 3));	
-        System.out.println(calc.mul(3, 3));
-        System.out.println(calc.div(4, 2));
-        System.out.println(calc.mod(4, 3));  
-    }
-    
-    public void exerc3() {
-        MultiTable multiTable = new MultiTable(15);
-    }
-    
-    public void exerc4(String email) {
-        Validator.isEmail(email);
-    }
-    
-    public void exerc5_6() {
-        DateToFormat dateToFormat = new DateToFormat();
-        System.out.println(dateToFormat.getDateBr());
-        System.out.println(dateToFormat.getDateUs());
+    public static void main(String[] args) {
+
+        Calculator.sum(-2, -2);
+        Calculator.sum(-2, 2);
+        Calculator.sub(10, -10);
+        Calculator.sub(-5, -5);
+        Calculator.mul(0, 0);
+        Calculator.mul(-1, -1);
+        Calculator.mod(1, 1);
+        Calculator.div(0, 0);
+        System.out.println("-".repeat(100));
+
+        MultiTable.tableAll();
+        System.out.println("-".repeat(100));
+
+        DateToFormat.getDateBr();
+        DateToFormat.getDateSystem();
+        DateToFormat.getDateTimeBr();
+        DateToFormat.getDateTimeSystem();
+        System.out.println("-".repeat(100));
+
+        Validator.isPhone("55 21 9857-54321");
+        Validator.isTel("55 21 4433-2211");
+        Validator.isURL("http://teste");
+        Validator.isURL("https://teste");
+        Validator.isCPF("000.000.000-00");
+        System.out.println("-".repeat(100));
+        
     }
 }
