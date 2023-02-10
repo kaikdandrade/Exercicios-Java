@@ -29,9 +29,9 @@ public class Validator {
         System.out.println(matcher.matches());
     }
     
-    public static void isCPF(String cpf) {
+    public static boolean isCPF(String cpf) {
         Pattern regex = Pattern.compile("^[0-9]{3}+.[0-9]{3}+.[0-9]{3}+-[0-9]{2}$");
         Matcher matcher = regex.matcher(cpf);
-        System.out.println(matcher.matches());
+        return matcher.matches();
     }
 }
