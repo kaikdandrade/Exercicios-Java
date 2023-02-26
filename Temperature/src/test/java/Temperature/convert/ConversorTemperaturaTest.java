@@ -1,8 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
-package testesjunit;
+package Temperature.convert;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -10,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import temperature.convert.ConversorTemperatura;
 
 /**
  *
@@ -39,7 +36,7 @@ public class ConversorTemperaturaTest {
     @Test
     public void testConverteCelsiusParaFahrenheit() {
         System.out.println("converteCelsiusParaFahrenheit");
-        double celsius = 32.0;
+        double celsius = 32;
         double expResult = 89.6;
         double result = ConversorTemperatura.converteCelsiusParaFahrenheit(celsius);
         assertEquals(expResult, result, 0);
@@ -49,7 +46,7 @@ public class ConversorTemperaturaTest {
     public void testConverteFahrenheitParaCelsius() {
         System.out.println("converteFahrenheitParaCelsius");
         double fahrenheit = 89.6;
-        double expResult = 32.0;
+        double expResult = 32;
         double result = ConversorTemperatura.converteFahrenheitParaCelsius(fahrenheit);
         assertEquals(expResult, result, 0);
     }

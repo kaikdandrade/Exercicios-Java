@@ -1,4 +1,4 @@
-package testesjunit;
+package temperature.convert;
 
 public class TemperaturaCelsius {
     
