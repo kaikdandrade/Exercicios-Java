@@ -6,10 +6,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
-/**
- *
- * @author Kaik D' Andrade
- */
 public class ExerciseOne {
 
     private String firstName = "";

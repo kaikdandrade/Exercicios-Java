@@ -3,10 +3,6 @@ package exerciseone.exerciseone;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- *
- * @author Kaik
- */
 public class ExerciseOneTest {
 
     public ExerciseOneTest() {

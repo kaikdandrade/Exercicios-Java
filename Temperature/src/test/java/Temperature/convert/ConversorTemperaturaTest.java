@@ -8,10 +8,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import temperature.convert.ConversorTemperatura;
 
-/**
- *
- * @author Kaik
- */
 public class ConversorTemperaturaTest {
     
     public ConversorTemperaturaTest() {
