@@ -1,5 +1,6 @@
 package dice;
 
+import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,54 +9,56 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DiceTest {
-    
+
     public DiceTest() {
     }
-    
+
     @BeforeAll
     public static void setUpClass() {
     }
-    
+
     @AfterAll
     public static void tearDownClass() {
     }
-    
+
     @BeforeEach
     public void setUp() {
     }
-    
+
     @AfterEach
     public void tearDown() {
     }
 
     @Test
-    public void testGetNumber() {
-        System.out.println("getNumber");
+    public void testInvalidNumber() {
+        System.out.println("invalidNumber");
         Dice instance = new Dice();
-        int expResult = 0;
+        int expResult = 1;
+        instance.setNumber(8);
         int result = instance.getNumber();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     @Test
-    public void testSetNumber() {
-        System.out.println("setNumber");
-        int number = 0;
+    public void testValidNumber() {
+        System.out.println("validNumber");
         Dice instance = new Dice();
-        instance.setNumber(number);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        int expResult = 5;
+        instance.setNumber(5);
+        int result = instance.getNumber();
+        assertEquals(expResult, result);
     }
 
     @Test
     public void testPlayDice() {
         System.out.println("playDice");
-        Dice instance = new Dice();
-        instance.playDice();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Dice dice = new Dice();
+        int expResult = 6;
+        ArrayList results = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            dice.playDice();
+            results.add(dice.getNumber());
+        }
+        assertEquals(expResult, results.size());
     }
-    
 }
