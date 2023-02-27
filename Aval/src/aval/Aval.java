@@ -3,6 +3,7 @@ package Aval;
 import Control.PopUp;
 import Model.DatabaseModel;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -27,7 +28,7 @@ public class Aval extends javax.swing.JFrame {
             tableRead.getColumnModel().getColumn(colInit).setCellRenderer(tableCell);
         }
 
-        readAll();
+        panelRead();
     }
 
     @SuppressWarnings("unchecked")
@@ -39,7 +40,7 @@ public class Aval extends javax.swing.JFrame {
         panelRead = new javax.swing.JPanel();
         scrollRead = new javax.swing.JScrollPane();
         tableRead = new javax.swing.JTable();
-        btnReadEdit = new javax.swing.JButton();
+        btnReadView = new javax.swing.JButton();
         panelCreate = new javax.swing.JPanel();
         labelCreate1 = new javax.swing.JLabel();
         labelCreate2 = new javax.swing.JLabel();
@@ -70,6 +71,7 @@ public class Aval extends javax.swing.JFrame {
         labelViewUpdate5 = new javax.swing.JLabel();
         txtViewUpdatePrice = new javax.swing.JFormattedTextField();
         labelViewUpdate6 = new javax.swing.JLabel();
+        btnViewUpdateEnter = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuItemRead = new javax.swing.JMenuItem();
@@ -96,14 +98,14 @@ public class Aval extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Title", "Author", "ISBN", "Páginas", "Price"
+                "ID", "Title", "Author", "ISBN", "Páginas", "Price"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -125,17 +127,25 @@ public class Aval extends javax.swing.JFrame {
         tableRead.getTableHeader().setReorderingAllowed(false);
         scrollRead.setViewportView(tableRead);
         tableRead.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (tableRead.getColumnModel().getColumnCount() > 0) {
+            tableRead.getColumnModel().getColumn(0).setMaxWidth(200);
+        }
 
-        btnReadEdit.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
-        btnReadEdit.setText("Editar Livro");
-        btnReadEdit.setAlignmentY(0.0F);
-        btnReadEdit.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btnReadEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnReadEdit.setFocusable(false);
-        btnReadEdit.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        btnReadEdit.setMaximumSize(new java.awt.Dimension(130, 30));
-        btnReadEdit.setMinimumSize(new java.awt.Dimension(130, 30));
-        btnReadEdit.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnReadView.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
+        btnReadView.setText("Editar Livro");
+        btnReadView.setAlignmentY(0.0F);
+        btnReadView.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnReadView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReadView.setFocusable(false);
+        btnReadView.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        btnReadView.setMaximumSize(new java.awt.Dimension(130, 30));
+        btnReadView.setMinimumSize(new java.awt.Dimension(130, 30));
+        btnReadView.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnReadView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReadViewActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelReadLayout = new javax.swing.GroupLayout(panelRead);
         panelRead.setLayout(panelReadLayout);
@@ -146,7 +156,7 @@ public class Aval extends javax.swing.JFrame {
                 .addGroup(panelReadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(scrollRead, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
                     .addGroup(panelReadLayout.createSequentialGroup()
-                        .addComponent(btnReadEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnReadView, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -154,13 +164,13 @@ public class Aval extends javax.swing.JFrame {
             panelReadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelReadLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(btnReadEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnReadView, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(scrollRead, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        panelMain.add(panelRead, "card2");
+        panelMain.add(panelRead, "panelRead");
 
         panelCreate.setBackground(new java.awt.Color(0, 71, 171));
 
@@ -331,14 +341,22 @@ public class Aval extends javax.swing.JFrame {
         btnViewUpdateDelete.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
         btnViewUpdateDelete.setText("Deletar");
         btnViewUpdateDelete.setAlignmentY(0.0F);
+        btnViewUpdateDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewUpdateDelete.setFocusable(false);
         btnViewUpdateDelete.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnViewUpdateDelete.setMaximumSize(new java.awt.Dimension(10000000, 10000000));
         btnViewUpdateDelete.setMinimumSize(new java.awt.Dimension(80, 30));
         btnViewUpdateDelete.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnViewUpdateDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewUpdateDeleteActionPerformed(evt);
+            }
+        });
 
         btnViewUpdateEdit.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
         btnViewUpdateEdit.setText("Editar");
         btnViewUpdateEdit.setAlignmentY(0.0F);
+        btnViewUpdateEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewUpdateEdit.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnViewUpdateEdit.setMaximumSize(new java.awt.Dimension(10000000, 10000000));
         btnViewUpdateEdit.setMinimumSize(new java.awt.Dimension(80, 30));
@@ -375,6 +393,9 @@ public class Aval extends javax.swing.JFrame {
         txtViewUpdateISBN.setMinimumSize(new java.awt.Dimension(230, 30));
         txtViewUpdateISBN.setPreferredSize(new java.awt.Dimension(230, 30));
 
+        spinnerViewUpdatePags.setAlignmentX(0.0F);
+        spinnerViewUpdatePags.setAlignmentY(0.0F);
+        spinnerViewUpdatePags.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spinnerViewUpdatePags.setMaximumSize(new java.awt.Dimension(10000000, 10000000));
         spinnerViewUpdatePags.setMinimumSize(new java.awt.Dimension(100, 26));
         spinnerViewUpdatePags.setName(""); // NOI18N
@@ -426,6 +447,21 @@ public class Aval extends javax.swing.JFrame {
         labelViewUpdate6.setForeground(new java.awt.Color(255, 255, 255));
         labelViewUpdate6.setText("Valor:");
 
+        btnViewUpdateEnter.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        btnViewUpdateEnter.setText("Salvar");
+        btnViewUpdateEnter.setAlignmentY(0.0F);
+        btnViewUpdateEnter.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewUpdateEnter.setFocusable(false);
+        btnViewUpdateEnter.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        btnViewUpdateEnter.setMaximumSize(new java.awt.Dimension(10000000, 10000000));
+        btnViewUpdateEnter.setMinimumSize(new java.awt.Dimension(80, 30));
+        btnViewUpdateEnter.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnViewUpdateEnter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewUpdateEnterActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelViewUpdateLayout = new javax.swing.GroupLayout(panelViewUpdate);
         panelViewUpdate.setLayout(panelViewUpdateLayout);
         panelViewUpdateLayout.setHorizontalGroup(
@@ -468,6 +504,11 @@ public class Aval extends javax.swing.JFrame {
                                     .addComponent(spinnerViewUpdatePags, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(labelViewUpdate1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(205, Short.MAX_VALUE))))
+            .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelViewUpdateLayout.createSequentialGroup()
+                    .addContainerGap(415, Short.MAX_VALUE)
+                    .addComponent(btnViewUpdateEnter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(205, 205, 205)))
         );
         panelViewUpdateLayout.setVerticalGroup(
             panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -501,9 +542,14 @@ public class Aval extends javax.swing.JFrame {
                     .addComponent(btnViewUpdateEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnViewUpdateDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(125, Short.MAX_VALUE))
+            .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelViewUpdateLayout.createSequentialGroup()
+                    .addContainerGap(345, Short.MAX_VALUE)
+                    .addComponent(btnViewUpdateEnter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(125, 125, 125)))
         );
 
-        panelMain.add(panelViewUpdate, "card4");
+        panelMain.add(panelViewUpdate, "panelViewUpdate");
 
         javax.swing.GroupLayout frameContentLayout = new javax.swing.GroupLayout(frameContent.getContentPane());
         frameContent.getContentPane().setLayout(frameContentLayout);
@@ -578,11 +624,11 @@ public class Aval extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuItemReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemReadActionPerformed
-        // TODO add your handling code here:
+        panelRead();
     }//GEN-LAST:event_menuItemReadActionPerformed
 
     private void menuItemCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemCreateActionPerformed
-        openCard("panelCreate");
+        panelCreate();
     }//GEN-LAST:event_menuItemCreateActionPerformed
 
     private void menuItemLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemLogoutActionPerformed
@@ -594,8 +640,48 @@ public class Aval extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemLogoutActionPerformed
 
     private void btnViewUpdateEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUpdateEditActionPerformed
-        // TODO add your handling code here:
+        btnViewUpdateEdit.setVisible(false);
+        btnViewUpdateEnter.setVisible(true);
+        blockTextFields(true, txtViewUpdateTitle, txtViewUpdateAuthor, txtViewUpdateISBN, txtViewUpdatePrice);
+        spinnerViewUpdatePags.setEnabled(true);
     }//GEN-LAST:event_btnViewUpdateEditActionPerformed
+
+    private void btnReadViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReadViewActionPerformed
+        int selected = tableRead.getSelectedRow();
+        if (selected < 0) {
+            PopUp.showAlert("Selecione um item primeiro.");
+
+        } else {
+            // Capta o id da linha selecionada
+            int selectedId = (int) tableRead.getModel().getValueAt(selected, 0);
+            panelView(selectedId);
+        }
+    }//GEN-LAST:event_btnReadViewActionPerformed
+
+    private void btnViewUpdateDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUpdateDeleteActionPerformed
+        if (verifyTextFields(txtViewUpdateId)) {
+            // Verifica se o usuário confirmou a exclusão do registro
+            if (PopUp.showConfirm("Aviso:", "Deseja realmente excluir este registro?")) {
+                if (PopUp.showConfirmAlert("Isso Será permanente! Isto é sem volta!\\nAo proseguir automaticamente você assina o termo de responsabilidade...\nIsto é qualquer problema gerado por conta da exclusão desse dado cabe apenas a você!")) {
+                    dbModel.delete(Integer.parseInt(txtViewUpdateId.getText()));
+                    panelRead();
+                }
+            }
+        }
+    }//GEN-LAST:event_btnViewUpdateDeleteActionPerformed
+
+    private void btnViewUpdateEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUpdateEnterActionPerformed
+        if (verifyTextFields(txtViewUpdateId, txtViewUpdatePrice, txtViewUpdateTitle, txtViewUpdateAuthor, txtViewUpdateISBN) && !spinnerViewUpdatePags.getValue().equals(0)) {
+            String id = txtViewUpdateId.getText();
+            String title = txtViewUpdateTitle.getText();
+            String author = txtViewUpdateAuthor.getText();
+            String isbn = txtViewUpdateISBN.getText();
+            int pags = (int) txtViewUpdatePrice.getValue();
+            String price = txtViewUpdatePrice.getText();
+            dbModel.update(id, title, author, isbn, pags, price);
+            panelRead();
+        }
+    }//GEN-LAST:event_btnViewUpdateEnterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -635,9 +721,10 @@ public class Aval extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateClear;
     private javax.swing.JButton btnCreateEnter;
-    private javax.swing.JButton btnReadEdit;
+    private javax.swing.JButton btnReadView;
     private javax.swing.JButton btnViewUpdateDelete;
     private javax.swing.JButton btnViewUpdateEdit;
+    private javax.swing.JButton btnViewUpdateEnter;
     private javax.swing.JInternalFrame frameContent;
     private javax.swing.JLabel labelCreate1;
     private javax.swing.JLabel labelCreate2;
@@ -698,7 +785,13 @@ public class Aval extends javax.swing.JFrame {
         }
     }
 
-    private void readAll() {
+    public void blockTextFields(boolean block, javax.swing.JTextField... fields) {
+        for (javax.swing.JTextField field : fields) {
+            field.setEnabled(block);
+        }
+    }
+
+    private void panelRead() {
         DefaultTableModel tableModel = (DefaultTableModel) tableRead.getModel();
 
         // Apaga as linhas da tabela para evitar colisão de dados
@@ -709,11 +802,37 @@ public class Aval extends javax.swing.JFrame {
         for (Object[] rowData : data) {
             tableModel.addRow(rowData);
         }
-        
+
         // Dá um reset na varíavel por questão de segurança
         data = null;
+
+        openCard("panelRead");
     }
 
+    public void panelView(int id) {
+
+        blockTextFields(false, txtViewUpdateAuthor, txtViewUpdateISBN, txtViewUpdatePrice, txtViewUpdateTitle);
+        spinnerViewUpdatePags.setEnabled(false);
+        List<Object[]> data = dbModel.read(id);
+
+        for (Object[] line : data) {
+            txtViewUpdateId.setText(line[0].toString());
+            txtViewUpdateTitle.setText(line[1].toString());
+            txtViewUpdateAuthor.setText(line[2].toString());
+            txtViewUpdateISBN.setText(line[3].toString());
+            int spinner = Integer.parseInt(line[4].toString());
+            spinnerViewUpdatePags.setValue(spinner);
+            txtViewUpdatePrice.setText(line[5].toString());
+        }
+
+        btnViewUpdateEnter.setVisible(false);
+        openCard("panelViewUpdate");
+    }
+
+    public void panelCreate() {
+        clearTextFields(txtCreateAuthor, txtCreateISBN, txtCreatePrice, txtCreateTitle);
+        openCard("panelCreate");
+    }
 //
 //    private void viewData(ResultSet res) {
 //        // Desabilita os campos...

@@ -104,7 +104,7 @@ public class DatabaseModel {
      */
     public List<Object[]> readAll() {
         try {
-            sql = "SELECT title, author, isbn, pages, price FROM book";
+            sql = "SELECT * FROM book";
 
             setConnection();
             setPstm(getConn().prepareStatement(sql));
@@ -115,6 +115,7 @@ public class DatabaseModel {
             // Pegando os dados do banco de dados
             while (getRes().next()) {
                 Object[] newLine = {
+                    getRes().getInt("id"),
                     getRes().getString("title"),
                     getRes().getString("author"),
                     getRes().getString("isbn"),
@@ -149,7 +150,7 @@ public class DatabaseModel {
      */
     public List<Object[]> read(int bookId) {
         try {
-            sql = "SELECT title, author, isbn, pages, price FROM book WHERE id = ?";
+            sql = "SELECT * FROM book WHERE id = ?";
 
             setConnection();
             setPstm(getConn().prepareStatement(sql));
@@ -161,6 +162,7 @@ public class DatabaseModel {
             // Pegando os dados do banco de dados
             while (getRes().next()) {
                 Object[] newLine = {
+                    getRes().getInt("id"),
                     getRes().getString("title"),
                     getRes().getString("author"),
                     getRes().getString("isbn"),
@@ -197,8 +199,11 @@ public class DatabaseModel {
      * @param pages é a quantidade de páginas do livro
      * @param price é o valor do livro
      */
-    public void update(int id, String title, String author, String isbn, int pages, double price) {
+    public void update(String id, String title, String author, String isbn, String pages, String price) {
 
+        double truePrice = Double.parseDouble(price);
+        int bookId = Integer.parseInt(id);
+        int truePages = Integer.parseInt(pages);
         // Comando SQL
         sql = "UPDATE book SET title = ?, author = ?, isbn = ?, pages = ?, price = ? WHERE id = ?";
 
@@ -211,9 +216,9 @@ public class DatabaseModel {
             getPstm().setString(1, title);
             getPstm().setString(2, author);
             getPstm().setString(3, isbn);
-            getPstm().setInt(4, pages);
-            getPstm().setDouble(5, price);
-            getPstm().setInt(6, id);
+            getPstm().setInt(4, truePages);
+            getPstm().setDouble(5, truePrice);
+            getPstm().setInt(6, bookId);
 
             // Executa o comando SQL no banco de dados
             getPstm().execute();
@@ -223,7 +228,7 @@ public class DatabaseModel {
 
         } catch (SQLException error) {
             // Caso gere um erro
-            PopUp.showWarning("DatabaseModel\\updateUser\n" + error);
+            PopUp.showWarning("DatabaseModel\\update\n" + error);
 
         } finally {
             // Finaliza a toda a conexão com o banco de dados
@@ -239,34 +244,28 @@ public class DatabaseModel {
      */
     public void delete(int id) {
 
-        // Verifica se o usuário confirmou a exclusão do registro
-        if (PopUp.showConfirm("Aviso:", "Deseja realmente excluir este registro?")) {
-            if (PopUp.showConfirmAlert("Isso Será permanente! Isto é sem volta!\\nAo proseguir automaticamente você assina o termo de responsabilidade...\nIsto é qualquer problema gerado por conta da exclusão desse dado cabe apenas a você!")) {
+        // Comando SQL
+        sql = "DELETE FROM book WHERE id = ?";
 
-                // Comando SQL
-                sql = "DELETE book WHERE id = ?";
+        try {
+            // Conecta ao banco de dados, depois prepara, filtra e sanitiza o sql para executa-lo
+            setConnection();
+            setPstm(getConn().prepareStatement(sql));
 
-                try {
-                    // Conecta ao banco de dados, depois prepara, filtra e sanitiza o sql para executa-lo
-                    setConnection();
-                    setPstm(getConn().prepareStatement(sql));
+            // Altera os "?" pelos valores corretos
+            getPstm().setInt(1, id);
 
-                    // Altera os "?" pelos valores corretos
-                    getPstm().setInt(1, id);
+            // Executa o comando SQL no banco de dados
+            getPstm().execute();
 
-                    // Executa o comando SQL no banco de dados
-                    getPstm().execute();
+        } catch (SQLException error) {
+            // Caso gere um erro
+            PopUp.showWarning("DatabaseModel\\delete\n" + error);
 
-                } catch (SQLException error) {
-                    // Caso gere um erro
-                    PopUp.showWarning("DatabaseModel\\delete\n" + error);
-
-                } finally {
-                    // Finaliza toda a conexão com o banco de dados
-                    setClose();
-                    sql = null;
-                }
-            }
+        } finally {
+            // Finaliza toda a conexão com o banco de dados
+            setClose();
+            sql = null;
         }
     }
 
