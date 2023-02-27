@@ -1,15 +1,17 @@
 package Aval;
 
 import Control.PopUp;
+import Model.DatabaseModel;
 import java.awt.Font;
-import java.text.NumberFormat;
-import java.util.Currency;
-import java.util.Locale;
+import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 public class Aval extends javax.swing.JFrame {
+
+    private DatabaseModel dbModel = new DatabaseModel();
 
     public Aval() {
         initComponents();
@@ -21,9 +23,11 @@ public class Aval extends javax.swing.JFrame {
         tableHeader.setHorizontalAlignment(SwingConstants.CENTER);
         DefaultTableCellRenderer tableCell = new DefaultTableCellRenderer();
         tableCell.setHorizontalAlignment(SwingConstants.CENTER);
-        for(int colInit = 0; colInit < tableRead.getColumnModel().getColumnCount(); colInit++) {
+        for (int colInit = 0; colInit < tableRead.getColumnModel().getColumnCount(); colInit++) {
             tableRead.getColumnModel().getColumn(colInit).setCellRenderer(tableCell);
         }
+
+        readAll();
     }
 
     @SuppressWarnings("unchecked")
@@ -51,7 +55,21 @@ public class Aval extends javax.swing.JFrame {
         labelCreate5 = new javax.swing.JLabel();
         labelCreate6 = new javax.swing.JLabel();
         labelCreate7 = new javax.swing.JLabel();
-        panelUpdate = new javax.swing.JPanel();
+        panelViewUpdate = new javax.swing.JPanel();
+        labelViewUpdate1 = new javax.swing.JLabel();
+        btnViewUpdateDelete = new javax.swing.JButton();
+        btnViewUpdateEdit = new javax.swing.JButton();
+        txtViewUpdateTitle = new javax.swing.JTextField();
+        txtViewUpdateAuthor = new javax.swing.JTextField();
+        txtViewUpdateISBN = new javax.swing.JFormattedTextField();
+        spinnerViewUpdatePags = new javax.swing.JSpinner();
+        txtViewUpdateId = new javax.swing.JTextField();
+        labelViewUpdate2 = new javax.swing.JLabel();
+        labelViewUpdate3 = new javax.swing.JLabel();
+        labelViewUpdate4 = new javax.swing.JLabel();
+        labelViewUpdate5 = new javax.swing.JLabel();
+        txtViewUpdatePrice = new javax.swing.JFormattedTextField();
+        labelViewUpdate6 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuItemRead = new javax.swing.JMenuItem();
@@ -78,14 +96,14 @@ public class Aval extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Title", "Author", "ISBN", "Price"
+                "Title", "Author", "ISBN", "Páginas", "Price"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -126,7 +144,7 @@ public class Aval extends javax.swing.JFrame {
             .addGroup(panelReadLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelReadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollRead, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
+                    .addComponent(scrollRead, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
                     .addGroup(panelReadLayout.createSequentialGroup()
                         .addComponent(btnReadEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -138,7 +156,7 @@ public class Aval extends javax.swing.JFrame {
                 .addGap(14, 14, 14)
                 .addComponent(btnReadEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrollRead, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                .addComponent(scrollRead, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -239,10 +257,11 @@ public class Aval extends javax.swing.JFrame {
         panelCreate.setLayout(panelCreateLayout);
         panelCreateLayout.setHorizontalGroup(
             panelCreateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCreateLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCreateLayout.createSequentialGroup()
+                .addContainerGap(179, Short.MAX_VALUE)
                 .addGroup(panelCreateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelCreateLayout.createSequentialGroup()
-                        .addGap(170, 170, 170)
+                        .addGap(14, 14, 14)
                         .addGroup(panelCreateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(panelCreateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(labelCreate5)
@@ -262,18 +281,15 @@ public class Aval extends javax.swing.JFrame {
                                 .addComponent(txtCreateTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelCreateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(spinnerCreatePags, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtCreatePrice, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(panelCreateLayout.createSequentialGroup()
-                        .addGap(156, 156, 156)
-                        .addGroup(panelCreateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelCreate1)
-                            .addComponent(labelCreate2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 157, Short.MAX_VALUE))
+                                .addComponent(txtCreatePrice, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(labelCreate1)
+                    .addComponent(labelCreate2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(158, Short.MAX_VALUE))
         );
         panelCreateLayout.setVerticalGroup(
             panelCreateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCreateLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addContainerGap(50, Short.MAX_VALUE)
                 .addComponent(labelCreate1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelCreate2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -301,25 +317,193 @@ public class Aval extends javax.swing.JFrame {
                 .addGroup(panelCreateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCreateEnter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCreateClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
         );
 
         panelMain.add(panelCreate, "panelCreate");
 
-        panelUpdate.setBackground(new java.awt.Color(0, 71, 171));
+        panelViewUpdate.setBackground(new java.awt.Color(0, 71, 171));
 
-        javax.swing.GroupLayout panelUpdateLayout = new javax.swing.GroupLayout(panelUpdate);
-        panelUpdate.setLayout(panelUpdateLayout);
-        panelUpdateLayout.setHorizontalGroup(
-            panelUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 676, Short.MAX_VALUE)
+        labelViewUpdate1.setFont(new java.awt.Font("Cambria", 0, 26)); // NOI18N
+        labelViewUpdate1.setForeground(new java.awt.Color(255, 255, 255));
+        labelViewUpdate1.setText("Visualizar Registro:");
+
+        btnViewUpdateDelete.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        btnViewUpdateDelete.setText("Deletar");
+        btnViewUpdateDelete.setAlignmentY(0.0F);
+        btnViewUpdateDelete.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        btnViewUpdateDelete.setMaximumSize(new java.awt.Dimension(10000000, 10000000));
+        btnViewUpdateDelete.setMinimumSize(new java.awt.Dimension(80, 30));
+        btnViewUpdateDelete.setPreferredSize(new java.awt.Dimension(80, 30));
+
+        btnViewUpdateEdit.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        btnViewUpdateEdit.setText("Editar");
+        btnViewUpdateEdit.setAlignmentY(0.0F);
+        btnViewUpdateEdit.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        btnViewUpdateEdit.setMaximumSize(new java.awt.Dimension(10000000, 10000000));
+        btnViewUpdateEdit.setMinimumSize(new java.awt.Dimension(80, 30));
+        btnViewUpdateEdit.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnViewUpdateEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewUpdateEditActionPerformed(evt);
+            }
+        });
+
+        txtViewUpdateTitle.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        txtViewUpdateTitle.setAlignmentX(0.0F);
+        txtViewUpdateTitle.setAlignmentY(0.0F);
+        txtViewUpdateTitle.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtViewUpdateTitle.setMinimumSize(new java.awt.Dimension(230, 30));
+        txtViewUpdateTitle.setPreferredSize(new java.awt.Dimension(230, 30));
+
+        txtViewUpdateAuthor.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        txtViewUpdateAuthor.setAlignmentX(0.0F);
+        txtViewUpdateAuthor.setAlignmentY(0.0F);
+        txtViewUpdateAuthor.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtViewUpdateAuthor.setMinimumSize(new java.awt.Dimension(230, 30));
+        txtViewUpdateAuthor.setPreferredSize(new java.awt.Dimension(230, 30));
+
+        try {
+            txtViewUpdateISBN.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-##-###-####-#")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtViewUpdateISBN.setAlignmentX(0.0F);
+        txtViewUpdateISBN.setAlignmentY(0.0F);
+        txtViewUpdateISBN.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        txtViewUpdateISBN.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtViewUpdateISBN.setMinimumSize(new java.awt.Dimension(230, 30));
+        txtViewUpdateISBN.setPreferredSize(new java.awt.Dimension(230, 30));
+
+        spinnerViewUpdatePags.setMaximumSize(new java.awt.Dimension(10000000, 10000000));
+        spinnerViewUpdatePags.setMinimumSize(new java.awt.Dimension(100, 26));
+        spinnerViewUpdatePags.setName(""); // NOI18N
+        spinnerViewUpdatePags.setPreferredSize(new java.awt.Dimension(100, 26));
+
+        txtViewUpdateId.setEditable(false);
+        txtViewUpdateId.setBackground(new java.awt.Color(0, 71, 171));
+        txtViewUpdateId.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        txtViewUpdateId.setForeground(new java.awt.Color(0, 71, 171));
+        txtViewUpdateId.setActionCommand("<Not Set>");
+        txtViewUpdateId.setAlignmentX(0.0F);
+        txtViewUpdateId.setAlignmentY(0.0F);
+        txtViewUpdateId.setBorder(null);
+        txtViewUpdateId.setCaretColor(new java.awt.Color(0, 71, 171));
+        txtViewUpdateId.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        txtViewUpdateId.setDisabledTextColor(new java.awt.Color(0, 71, 171));
+        txtViewUpdateId.setFocusable(false);
+        txtViewUpdateId.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtViewUpdateId.setMaximumSize(new java.awt.Dimension(50, 50));
+        txtViewUpdateId.setMinimumSize(new java.awt.Dimension(50, 50));
+        txtViewUpdateId.setPreferredSize(new java.awt.Dimension(50, 50));
+        txtViewUpdateId.setSelectedTextColor(new java.awt.Color(0, 71, 171));
+
+        labelViewUpdate2.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        labelViewUpdate2.setForeground(new java.awt.Color(255, 255, 255));
+        labelViewUpdate2.setText("Título:");
+
+        labelViewUpdate3.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        labelViewUpdate3.setForeground(new java.awt.Color(255, 255, 255));
+        labelViewUpdate3.setText("Autor:");
+
+        labelViewUpdate4.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        labelViewUpdate4.setForeground(new java.awt.Color(255, 255, 255));
+        labelViewUpdate4.setText("ISBN:");
+
+        labelViewUpdate5.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        labelViewUpdate5.setForeground(new java.awt.Color(255, 255, 255));
+        labelViewUpdate5.setText("Páginas:");
+
+        txtViewUpdatePrice.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤¤#,##0.00"))));
+        txtViewUpdatePrice.setAlignmentX(0.0F);
+        txtViewUpdatePrice.setAlignmentY(0.0F);
+        txtViewUpdatePrice.setMaximumSize(new java.awt.Dimension(10000000, 10000000));
+        txtViewUpdatePrice.setMinimumSize(new java.awt.Dimension(100, 26));
+        txtViewUpdatePrice.setName(""); // NOI18N
+        txtViewUpdatePrice.setPreferredSize(new java.awt.Dimension(100, 26));
+
+        labelViewUpdate6.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        labelViewUpdate6.setForeground(new java.awt.Color(255, 255, 255));
+        labelViewUpdate6.setText("Valor:");
+
+        javax.swing.GroupLayout panelViewUpdateLayout = new javax.swing.GroupLayout(panelViewUpdate);
+        panelViewUpdate.setLayout(panelViewUpdateLayout);
+        panelViewUpdateLayout.setHorizontalGroup(
+            panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelViewUpdateLayout.createSequentialGroup()
+                .addGap(0, 202, Short.MAX_VALUE)
+                .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelViewUpdateLayout.createSequentialGroup()
+                        .addComponent(txtViewUpdateId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(172, 172, 172))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelViewUpdateLayout.createSequentialGroup()
+                        .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(panelViewUpdateLayout.createSequentialGroup()
+                                .addComponent(labelViewUpdate6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(panelViewUpdateLayout.createSequentialGroup()
+                                        .addComponent(txtViewUpdatePrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(130, 130, 130))
+                                    .addGroup(panelViewUpdateLayout.createSequentialGroup()
+                                        .addComponent(btnViewUpdateDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnViewUpdateEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelViewUpdateLayout.createSequentialGroup()
+                                .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelViewUpdateLayout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(labelViewUpdate2)
+                                                .addComponent(labelViewUpdate3))
+                                            .addComponent(labelViewUpdate4)))
+                                    .addComponent(labelViewUpdate5, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtViewUpdateISBN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(txtViewUpdateAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtViewUpdateTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(spinnerViewUpdatePags, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(labelViewUpdate1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(205, Short.MAX_VALUE))))
         );
-        panelUpdateLayout.setVerticalGroup(
-            panelUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 423, Short.MAX_VALUE)
+        panelViewUpdateLayout.setVerticalGroup(
+            panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelViewUpdateLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtViewUpdateId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(labelViewUpdate1)
+                .addGap(18, 18, 18)
+                .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelViewUpdate2)
+                    .addComponent(txtViewUpdateTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtViewUpdateAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelViewUpdate3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtViewUpdateISBN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelViewUpdate4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(spinnerViewUpdatePags, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelViewUpdate5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtViewUpdatePrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelViewUpdate6))
+                .addGap(18, 18, 18)
+                .addGroup(panelViewUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnViewUpdateEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnViewUpdateDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(125, Short.MAX_VALUE))
         );
 
-        panelMain.add(panelUpdate, "card4");
+        panelMain.add(panelViewUpdate, "card4");
 
         javax.swing.GroupLayout frameContentLayout = new javax.swing.GroupLayout(frameContent.getContentPane());
         frameContent.getContentPane().setLayout(frameContentLayout);
@@ -334,7 +518,7 @@ public class Aval extends javax.swing.JFrame {
             frameContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(frameContentLayout.createSequentialGroup()
                 .addComponent(panelMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addGap(5, 5, 5))
         );
 
         menuFile.setText("Arquivo");
@@ -386,7 +570,8 @@ public class Aval extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(frameContent))
+                .addComponent(frameContent)
+                .addContainerGap())
         );
 
         pack();
@@ -407,6 +592,10 @@ public class Aval extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_menuItemLogoutActionPerformed
+
+    private void btnViewUpdateEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUpdateEditActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnViewUpdateEditActionPerformed
 
     /**
      * @param args the command line arguments
@@ -447,6 +636,8 @@ public class Aval extends javax.swing.JFrame {
     private javax.swing.JButton btnCreateClear;
     private javax.swing.JButton btnCreateEnter;
     private javax.swing.JButton btnReadEdit;
+    private javax.swing.JButton btnViewUpdateDelete;
+    private javax.swing.JButton btnViewUpdateEdit;
     private javax.swing.JInternalFrame frameContent;
     private javax.swing.JLabel labelCreate1;
     private javax.swing.JLabel labelCreate2;
@@ -455,6 +646,12 @@ public class Aval extends javax.swing.JFrame {
     private javax.swing.JLabel labelCreate5;
     private javax.swing.JLabel labelCreate6;
     private javax.swing.JLabel labelCreate7;
+    private javax.swing.JLabel labelViewUpdate1;
+    private javax.swing.JLabel labelViewUpdate2;
+    private javax.swing.JLabel labelViewUpdate3;
+    private javax.swing.JLabel labelViewUpdate4;
+    private javax.swing.JLabel labelViewUpdate5;
+    private javax.swing.JLabel labelViewUpdate6;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuItemCreate;
@@ -463,14 +660,20 @@ public class Aval extends javax.swing.JFrame {
     private javax.swing.JPanel panelCreate;
     private javax.swing.JPanel panelMain;
     private javax.swing.JPanel panelRead;
-    private javax.swing.JPanel panelUpdate;
+    private javax.swing.JPanel panelViewUpdate;
     private javax.swing.JScrollPane scrollRead;
     private javax.swing.JSpinner spinnerCreatePags;
+    private javax.swing.JSpinner spinnerViewUpdatePags;
     private javax.swing.JTable tableRead;
     private javax.swing.JTextField txtCreateAuthor;
     private javax.swing.JFormattedTextField txtCreateISBN;
     private javax.swing.JFormattedTextField txtCreatePrice;
     private javax.swing.JTextField txtCreateTitle;
+    private javax.swing.JTextField txtViewUpdateAuthor;
+    private javax.swing.JFormattedTextField txtViewUpdateISBN;
+    private javax.swing.JTextField txtViewUpdateId;
+    private javax.swing.JFormattedTextField txtViewUpdatePrice;
+    private javax.swing.JTextField txtViewUpdateTitle;
     // End of variables declaration//GEN-END:variables
 
     public void openCard(String cardName) {
@@ -478,76 +681,39 @@ public class Aval extends javax.swing.JFrame {
         card.show(panelMain, cardName);
     }
 
-//    private void readAll() {
-//        try {
-//            DefaultTableModel tableModel = (DefaultTableModel) tableRead.getModel();
-//
-//            // Apaga as linhas da tabela
-//            tableModel.setNumRows(0);
-//
-//            // Conecta ao banco
-//            conn = dbConnection.connect();
-//            String sql = "SELECT g_id, g_type, g_name, g_platform, g_media, g_status FROM game WHERE g_status != 'del'";
-//
-//            // Prepara, filtra e sanitiza o SQL e depois executa
-//            pstm = conn.prepareStatement(sql);
-//            res = pstm.executeQuery();
-//
-//            while (res.next()) {
-//                tableModel.addRow(new Object[]{
-//                    res.getInt("g_id"),
-//                    res.getString("g_type"),
-//                    res.getString("g_name"),
-//                    res.getString("g_platform"),
-//                    res.getString("g_media"),
-//                    res.getString("g_status")
-//                });
-//            }
-//        } catch (SQLException error) {
-//            PopUps.showError("Main.readAll\n" + error);
-//        } finally {
-//            dbConnection.dbClose(conn, pstm, res);
-//        }
-//    }
-//
-//    private void loadSelected(String action) {
-//        try {
-//            int selected = tableRead.getSelectedRow();
-//            if (selected < 0) {
-//                PopUps.showAlert("Selecione um item primeiro.");
-//            } else {
-//                // Capta o id da linha selecionada
-//                int selectedId = (int) tableRead.getModel().getValueAt(selected, 0);
-//                String sql = "SELECT * FROM game WHERE g_id = ? AND g_status != 'del'";
-//
-//                // Conecta ao banco de dados
-//                conn = dbConnection.connect();
-//
-//                // Prepara, filtra e sanitiza o SQL e dps executa
-//                pstm = conn.prepareStatement(sql);
-//
-//                // Substitui o "?" na query pelo Id do registro
-//                pstm.setInt(1, selectedId);
-//
-//                // Executa a query e armazena resultado(s) em res
-//                res = pstm.executeQuery();
-//
-//                // Carrega o método correto de acordo com a ação escolhida → action
-//                switch (action) {
-//                    case "view" ->
-//                        viewData(res);
-//                    case "edit" ->
-//                        editData(res);
-//                    default ->
-//                        PopUps.showAlert("Nenhum registro foi selecinado.");
-//                }
-//            }
-//        } catch (SQLException error) {
-//            PopUps.showError("Main.loadSelected\n" + error);
-//        } finally {
-//            dbConnection.dbClose(conn, pstm, res);
-//        }
-//    }
+    public boolean verifyTextFields(javax.swing.JTextField... fields) {
+        for (javax.swing.JTextField field : fields) {
+            if (field.getText().trim().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void clearTextFields(javax.swing.JTextField... fields) {
+        for (javax.swing.JTextField field : fields) {
+            if (!field.getText().equals("")) {
+                field.setText("");
+            }
+        }
+    }
+
+    private void readAll() {
+        DefaultTableModel tableModel = (DefaultTableModel) tableRead.getModel();
+
+        // Apaga as linhas da tabela para evitar colisão de dados
+        tableModel.setNumRows(0);
+
+        List<Object[]> data = dbModel.readAll();
+
+        for (Object[] rowData : data) {
+            tableModel.addRow(rowData);
+        }
+        
+        // Dá um reset na varíavel por questão de segurança
+        data = null;
+    }
+
 //
 //    private void viewData(ResultSet res) {
 //        // Desabilita os campos...

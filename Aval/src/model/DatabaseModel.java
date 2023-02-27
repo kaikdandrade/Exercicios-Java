@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kaik D' Andrade
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  */
 public class DatabaseModel {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/idealmusic?user=root&password=";
+    private static final String URL = "jdbc:mysql://localhost:3306/jbooker?user=root&password=";
     private Connection conn;
     private PreparedStatement pstm;
     private ResultSet res;
@@ -55,16 +56,17 @@ public class DatabaseModel {
 
     /**
      * Método responsável por registrar o livro no banco de dados
+     *
      * @param title é o título do livro
      * @param author é o autor do livro
      * @param isbn é o ISBN(Padrão Internacional de Numeração de Livro)
      * @param pages é quantidade de páginas
      * @param price é o valor do livro
      */
-    public void createBook(String title, String author, String isbn, int pages, String price) {
+    public void create(String title, String author, String isbn, int pages, double price) {
 
         // Comando SQL
-        sql = "INSERT INTO users(uname, uemail, upassword, uavatar, utype) VALUES (?, ?, sha2(?, 512), 1, ?)";
+        sql = "INSERT INTO book(title, author, isbn, pages, price) VALUES (?, ?, ?, ?, ?)";
 
         try {
             // Conecta ao banco de dados, depois prepara, filtra e sanitiza o sql para executa-lo
@@ -72,20 +74,21 @@ public class DatabaseModel {
             setPstm(getConn().prepareStatement(sql));
 
             // Alterando os "?" pelos valores corretos
-//            getPstm().setString(1, userName);
-//            getPstm().setString(2, userEmail);
-//            getPstm().setString(3, userPass);
-//            getPstm().setString(4, userType);
+            getPstm().setString(1, title);
+            getPstm().setString(2, author);
+            getPstm().setString(3, isbn);
+            getPstm().setInt(4, pages);
+            getPstm().setDouble(5, price);
 
             // Executa o comando SQL no banco de dados
             getPstm().execute();
 
             // Exibe uma notificação ao usuário
-            PopUp.showNotefy("Sucesso!!! Usuário criado, seja bem vindo(a).");
+            PopUp.showNotefy("Sucesso!!! Livro Cadastrado.");
 
         } catch (SQLException error) {
             // Caso gere um erro
-            PopUp.showWarning("DatabaseModel\\createUser\n" + error);
+            PopUp.showWarning("DatabaseModel\\create\n" + error);
 
         } finally {
             // Finaliza toda a conexão com o banco de dados
@@ -95,64 +98,109 @@ public class DatabaseModel {
     }
 
     /**
-     * Método responsável por ler e retornar todas os registro de uma coluna de
-     * alguma tabela do banco de dados
+     * Método responsável por retonar os dados de todos registros
      *
-     * @param table é a tabela do banco de dados
-     * @param field é nome da coluna
      * @return
      */
-    public ArrayList<String> readAll(String table, String field) {
-
-        // Varíavel que armazená os dados
-        ArrayList<String> data = new ArrayList<>();
-
-        // Comando SQL
-        sql = "SELECT * FROM " + table;
-
+    public List<Object[]> readAll() {
         try {
-            // Conecta ao banco de dados, depois prepara, filtra e sanitiza o sql para executa-lo
+            sql = "SELECT title, author, isbn, pages, price FROM book";
+
             setConnection();
             setPstm(getConn().prepareStatement(sql));
-
-            // Executa o comando SQL no banco de dados
             setRes(getPstm().executeQuery());
 
-            // Se for true, salva o dado do campo `field` dentro de `data`
+            List<Object[]> linhas = new ArrayList<>();
+
+            // Pegando os dados do banco de dados
             while (getRes().next()) {
-                data.add(getRes().getString(field));
+                Object[] newLine = {
+                    getRes().getString("title"),
+                    getRes().getString("author"),
+                    getRes().getString("isbn"),
+                    getRes().getInt("pages"),
+                    getRes().getDouble("price")
+                };
+
+                linhas.add(newLine);
             }
 
-            return data;
+            return linhas;
 
         } catch (SQLException error) {
             // Caso gere um erro
-            PopUp.showWarning("DatabaseModel\\readAll\n" + error);
+            PopUp.showWarning("Main.readAll\n" + error);
 
-            // Retorna null
+            // retorna nulo
             return null;
 
         } finally {
             // Finaliza toda a conexão com o banco de dados
             setClose();
             sql = null;
-            data = null;
         }
     }
 
     /**
-     * Método responsável por alterar os dados de nome e email do usuário
+     * Método responsável por retonar os dados do registro de acordo com o id
      *
-     * @param userId é o id do usuário
-     * @param userName é o nome do usuário
-     * @param userEmail é o email do usuário
-     * @return (false => erro; true => sucesso)
-     * @author Gabriel Souza
+     * @param bookId é o ID do livro
+     * @return
      */
-    public boolean updateUser(int userId, String userName, String userEmail) {
+    public List<Object[]> read(int bookId) {
+        try {
+            sql = "SELECT title, author, isbn, pages, price FROM book WHERE id = ?";
+
+            setConnection();
+            setPstm(getConn().prepareStatement(sql));
+            getPstm().setInt(1, bookId);
+            setRes(getPstm().executeQuery());
+
+            List<Object[]> linhas = new ArrayList<>();
+
+            // Pegando os dados do banco de dados
+            while (getRes().next()) {
+                Object[] newLine = {
+                    getRes().getString("title"),
+                    getRes().getString("author"),
+                    getRes().getString("isbn"),
+                    getRes().getInt("pages"),
+                    getRes().getDouble("price")
+                };
+
+                linhas.add(newLine);
+            }
+
+            return linhas;
+
+        } catch (SQLException error) {
+            // Caso gere um erro
+            PopUp.showWarning("Main.readAll\n" + error);
+
+            // retorna nulo
+            return null;
+
+        } finally {
+            // Finaliza toda a conexão com o banco de dados
+            setClose();
+            sql = null;
+        }
+    }
+
+    /**
+     * Método responsável por alterar os dados de um determinado registro
+     *
+     * @param id é o ID do livro
+     * @param title é o título do livro
+     * @param author é o autor do livro
+     * @param isbn é o ISBN(Padrão Internacional de Numeração de Livro)
+     * @param pages é a quantidade de páginas do livro
+     * @param price é o valor do livro
+     */
+    public void update(int id, String title, String author, String isbn, int pages, double price) {
 
         // Comando SQL
-        sql = "UPDATE users SET uname = ?, uemail = ? WHERE uid = ?";
+        sql = "UPDATE book SET title = ?, author = ?, isbn = ?, pages = ?, price = ? WHERE id = ?";
 
         try {
             // Conecta ao banco de dados, depois prepara, filtra e sanitiza o sql para executa-lo
@@ -160,25 +208,22 @@ public class DatabaseModel {
             setPstm(getConn().prepareStatement(sql));
 
             // Alterando os "?" pelos valores corretos
-            getPstm().setString(1, userName);
-            getPstm().setString(2, userEmail);
-            getPstm().setInt(3, userId);
+            getPstm().setString(1, title);
+            getPstm().setString(2, author);
+            getPstm().setString(3, isbn);
+            getPstm().setInt(4, pages);
+            getPstm().setDouble(5, price);
+            getPstm().setInt(6, id);
 
             // Executa o comando SQL no banco de dados
             getPstm().execute();
 
             // Exibe uma notificação ao usuário
-            PopUp.showNotefy("Sucesso!!! Dados do usuário alterados.");
-
-            // Retorna true
-            return true;
+            PopUp.showNotefy("Sucesso!!! Os dados do livro foram alterados.");
 
         } catch (SQLException error) {
             // Caso gere um erro
             PopUp.showWarning("DatabaseModel\\updateUser\n" + error);
-
-            // Retorna false
-            return false;
 
         } finally {
             // Finaliza a toda a conexão com o banco de dados
@@ -188,19 +233,18 @@ public class DatabaseModel {
     }
 
     /**
-     * Método responsável por "deletar" o usuário do banco de dados
+     * Método responsável por deletar um determinado registro
      *
-     * @param userId é o id do usuário
-     * @author Gabriel Souza
+     * @param id é o ID do livro
      */
-    public void deleteUser(int userId) {
+    public void delete(int id) {
 
-        // Verifica se o usuário confirmou a "exclusão" dos dados
-        if (PopUp.showConfirm("Aviso:", "Deseja realmente excluir este usuário?")) {
-            if (PopUp.showConfirmAlert("Realmente Deseja excluir esse registro.\nIsso Será permanente! Isto é sem volta!\\nAo clicar em proseguir automaticamente você assina o termo de responsabilidade...\nIsto é qualquer problema gerado por conta da exclusão desse dado cabe apenas a você!")) {
+        // Verifica se o usuário confirmou a exclusão do registro
+        if (PopUp.showConfirm("Aviso:", "Deseja realmente excluir este registro?")) {
+            if (PopUp.showConfirmAlert("Isso Será permanente! Isto é sem volta!\\nAo proseguir automaticamente você assina o termo de responsabilidade...\nIsto é qualquer problema gerado por conta da exclusão desse dado cabe apenas a você!")) {
 
                 // Comando SQL
-                sql = "UPDATE users SET ustatus = 'del' WHERE uid = ?";
+                sql = "DELETE book WHERE id = ?";
 
                 try {
                     // Conecta ao banco de dados, depois prepara, filtra e sanitiza o sql para executa-lo
@@ -208,14 +252,14 @@ public class DatabaseModel {
                     setPstm(getConn().prepareStatement(sql));
 
                     // Altera os "?" pelos valores corretos
-                    getPstm().setInt(1, userId);
+                    getPstm().setInt(1, id);
 
                     // Executa o comando SQL no banco de dados
                     getPstm().execute();
 
                 } catch (SQLException error) {
                     // Caso gere um erro
-                    PopUp.showWarning("DatabaseModel\\deleteUser\n" + error);
+                    PopUp.showWarning("DatabaseModel\\delete\n" + error);
 
                 } finally {
                     // Finaliza toda a conexão com o banco de dados
