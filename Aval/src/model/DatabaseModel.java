@@ -63,8 +63,10 @@ public class DatabaseModel {
      * @param pages é quantidade de páginas
      * @param price é o valor do livro
      */
-    public void create(String title, String author, String isbn, int pages, double price) {
+    public void create(String title, String author, String isbn, int pages, String price) {
 
+        double truePrice = Double.parseDouble(price);
+        
         // Comando SQL
         sql = "INSERT INTO book(title, author, isbn, pages, price) VALUES (?, ?, ?, ?, ?)";
 
@@ -78,7 +80,7 @@ public class DatabaseModel {
             getPstm().setString(2, author);
             getPstm().setString(3, isbn);
             getPstm().setInt(4, pages);
-            getPstm().setDouble(5, price);
+            getPstm().setDouble(5, truePrice);
 
             // Executa o comando SQL no banco de dados
             getPstm().execute();
@@ -199,11 +201,11 @@ public class DatabaseModel {
      * @param pages é a quantidade de páginas do livro
      * @param price é o valor do livro
      */
-    public void update(String id, String title, String author, String isbn, String pages, String price) {
+    public void update(String id, String title, String author, String isbn, int pages, String price) {
 
         double truePrice = Double.parseDouble(price);
         int bookId = Integer.parseInt(id);
-        int truePages = Integer.parseInt(pages);
+        
         // Comando SQL
         sql = "UPDATE book SET title = ?, author = ?, isbn = ?, pages = ?, price = ? WHERE id = ?";
 
@@ -216,7 +218,7 @@ public class DatabaseModel {
             getPstm().setString(1, title);
             getPstm().setString(2, author);
             getPstm().setString(3, isbn);
-            getPstm().setInt(4, truePages);
+            getPstm().setInt(4, pages);
             getPstm().setDouble(5, truePrice);
             getPstm().setInt(6, bookId);
 

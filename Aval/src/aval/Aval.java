@@ -3,8 +3,8 @@ package Aval;
 import Control.PopUp;
 import Model.DatabaseModel;
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -16,6 +16,8 @@ public class Aval extends javax.swing.JFrame {
 
     public Aval() {
         initComponents();
+        setTitle("Avalzinha");
+        setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage("src/resources/icons/icon_frame.png"));
         setLocationRelativeTo(null);
 
         JTableHeader header = tableRead.getTableHeader();
@@ -132,7 +134,7 @@ public class Aval extends javax.swing.JFrame {
         }
 
         btnReadView.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
-        btnReadView.setText("Editar Livro");
+        btnReadView.setText("Visualizar Registro");
         btnReadView.setAlignmentY(0.0F);
         btnReadView.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnReadView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -191,6 +193,11 @@ public class Aval extends javax.swing.JFrame {
         btnCreateEnter.setMaximumSize(new java.awt.Dimension(10000000, 10000000));
         btnCreateEnter.setMinimumSize(new java.awt.Dimension(80, 30));
         btnCreateEnter.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnCreateEnter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateEnterActionPerformed(evt);
+            }
+        });
 
         btnCreateClear.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
         btnCreateClear.setText("Limpar");
@@ -201,6 +208,11 @@ public class Aval extends javax.swing.JFrame {
         btnCreateClear.setMaximumSize(new java.awt.Dimension(10000000, 10000000));
         btnCreateClear.setMinimumSize(new java.awt.Dimension(80, 30));
         btnCreateClear.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnCreateClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateClearActionPerformed(evt);
+            }
+        });
 
         txtCreateAuthor.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
         txtCreateAuthor.setAlignmentX(0.0F);
@@ -640,6 +652,7 @@ public class Aval extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemLogoutActionPerformed
 
     private void btnViewUpdateEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUpdateEditActionPerformed
+        frameContent.setTitle("Editar Registro:");
         btnViewUpdateEdit.setVisible(false);
         btnViewUpdateEnter.setVisible(true);
         blockTextFields(true, txtViewUpdateTitle, txtViewUpdateAuthor, txtViewUpdateISBN, txtViewUpdatePrice);
@@ -676,12 +689,25 @@ public class Aval extends javax.swing.JFrame {
             String title = txtViewUpdateTitle.getText();
             String author = txtViewUpdateAuthor.getText();
             String isbn = txtViewUpdateISBN.getText();
-            int pags = (int) txtViewUpdatePrice.getValue();
+            int pags = (int) spinnerViewUpdatePags.getValue();
             String price = txtViewUpdatePrice.getText();
             dbModel.update(id, title, author, isbn, pags, price);
             panelRead();
         }
     }//GEN-LAST:event_btnViewUpdateEnterActionPerformed
+
+    private void btnCreateClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateClearActionPerformed
+        clearTextFields(txtCreateTitle, txtCreateAuthor, txtCreateISBN, txtCreatePrice);
+        spinnerCreatePags.setValue(0);
+    }//GEN-LAST:event_btnCreateClearActionPerformed
+
+    private void btnCreateEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateEnterActionPerformed
+        if(verifyTextFields(txtCreateTitle, txtCreateAuthor, txtCreateISBN, txtCreatePrice) && !spinnerViewUpdatePags.getValue().equals(0)) {
+            int pages = (int) spinnerViewUpdatePags.getValue();
+            dbModel.create(txtCreateTitle.getText(), txtCreateAuthor.getText(), txtCreateISBN.getText(), pages, txtCreatePrice.getText());
+            panelRead();
+        }
+    }//GEN-LAST:event_btnCreateEnterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -806,6 +832,8 @@ public class Aval extends javax.swing.JFrame {
         // Dá um reset na varíavel por questão de segurança
         data = null;
 
+        frameContent.setFrameIcon(new ImageIcon("src/resources/icons/icon_read.png"));
+        frameContent.setTitle("Ler Registros:");
         openCard("panelRead");
     }
 
@@ -825,241 +853,17 @@ public class Aval extends javax.swing.JFrame {
             txtViewUpdatePrice.setText(line[5].toString());
         }
 
+        btnViewUpdateEdit.setVisible(true);
         btnViewUpdateEnter.setVisible(false);
+        frameContent.setFrameIcon(new ImageIcon("src/resources/icons/icon_view.png"));
+        frameContent.setTitle("Visualizar Registro:");
         openCard("panelViewUpdate");
     }
 
     public void panelCreate() {
         clearTextFields(txtCreateAuthor, txtCreateISBN, txtCreatePrice, txtCreateTitle);
+        frameContent.setFrameIcon(new ImageIcon("src/resources/icons/icon_new.png"));
+        frameContent.setTitle("Criar Novo Registro:");
         openCard("panelCreate");
     }
-//
-//    private void viewData(ResultSet res) {
-//        // Desabilita os campos...
-//        txtViewStatus.setEditable(false);
-//        txtViewId.setEditable(false);
-//        txtViewType.setEditable(false);
-//        txtViewName.setEditable(false);
-//        txtViewPlatform.setEditable(false);
-//        txtViewMedia.setEditable(false);
-//        txtViewSinopse.setEditable(false);
-//
-//        try {
-//            res.next();
-//            txtViewId.setText(res.getString("g_id"));
-//            String txtDateView = "Data e Hora de registro: ";
-//            txtViewDate.setText(txtDateView + "[" + res.getString("g_date") + "]");
-//            txtViewType.setText(res.getString("g_type"));
-//            txtViewName.setText(res.getString("g_name"));
-//            txtViewPlatform.setText(res.getString("g_platform"));
-//            txtViewMedia.setText(res.getString("g_media"));
-//            txtViewSinopse.setText(res.getString("g_sinopse"));
-//            txtViewStatus.setText(res.getString("g_status"));
-//
-//            // Verifica o status do registro e seleciona o checkbox respectivo
-//            if (!res.getString("g_status").equals("on")) {
-//                checkboxEditStatusOff.setSelected(true);
-//            } else {
-//                checkboxEditStatusOn.setSelected(true);
-//            }
-//            openCard("panelView");
-//
-//        } catch (SQLException error) {
-//            PopUps.showError("Main.viewData\n" + error);
-//        } finally {
-//            dbConnection.dbClose(null, null, res);
-//        }
-//    }
-//
-//    private void editData(ResultSet res) {
-//        // Desabilita o campo ID
-//        txtEditId.setEditable(false);
-//        try {
-//            res.next();
-//            txtEditId.setText(res.getString("g_id"));
-//            txtEditType.setText(res.getString("g_type"));
-//            txtEditName.setText(res.getString("g_name"));
-//            txtEditPlatform.setText(res.getString("g_platform"));
-//            txtEditMedia.setText(res.getString("g_media"));
-//            txtEditSinopse.setText(res.getString("g_sinopse"));
-//
-//            openCard("panelEdit");
-//
-//        } catch (SQLException error) {
-//            PopUps.showError("Main.editData\n" + error);
-//        } finally {
-//            dbConnection.dbClose(null, null, res);
-//        }
-//    }
-//
-//    private void deleteData(int dataId) {
-//        int liabilityContract = PopUps.showConfirm("Oooops!", "Deseja Excluir esse registro?");
-//        if (liabilityContract == 0) {
-//            liabilityContract = PopUps.showConfirmAlert("Realmente Deseja excluir esse registro.\nIsso Será permanente! Isto é sem volta!\nAo clicar em proseguir automaticamente você assina o termo de responsabilidade...\nIsto é qualquer problema gerado por conta da exclusão desse dado cabe apenas a você!");
-//        }
-//
-//        if (liabilityContract == 0) {
-//            try {
-//                String sql = "UPDATE game SET g_status = 'del' WHERE g_id = ?";
-//
-//                // Conecta ao banco de dados
-//                conn = dbConnection.connect();
-//
-//                // Prepara, filtra e sanitiza o SQL e depois executa
-//                pstm = conn.prepareStatement(sql);
-//                // Substitui "?" pelo id do registro
-//                pstm.setInt(1, dataId);
-//                pstm.executeUpdate();
-//
-//                // Atualiza a listagem de registros e volta para panelRead
-//                readAll();
-//                openCard("panelRead");
-//
-//            } catch (SQLException error) {
-//                PopUps.showError("Main.deleteData\n" + error);
-//            } finally {
-//                dbConnection.dbClose(conn, pstm, null);
-//            }
-//        }
-//    }
-//
-//    public void updateData() {
-//        int dialogButton = PopUps.showConfirm("Confirmação:", "Deseja salvar as alterações?");
-//
-//        if (dialogButton == 0) {
-//            try {
-//                String sql = "UPDATE game SET g_type = ?, g_name = ?, g_platform = ?, g_media = ?, g_sinopse = ?, g_status = ? WHERE g_id = ?";
-//
-//                // Conecta com o banco de dados
-//                conn = dbConnection.connect();
-//
-//                // Prepara, filtra e sanitiza o sql e depois executa a query
-//                pstm = conn.prepareStatement(sql);
-//
-//                // Substitui os "?" no SQL pelos valores corretos
-//                pstm.setString(7, txtEditId.getText());
-//                pstm.setString(1, txtEditType.getText());
-//                pstm.setString(2, txtEditName.getText());
-//                pstm.setString(3, txtEditPlatform.getText());
-//                pstm.setString(4, txtEditMedia.getText());
-//                pstm.setString(5, txtEditSinopse.getText());
-//
-//                if (checkboxEditStatusOn.getSelectedObjects() != null) {
-//                    pstm.setString(6, "on");
-//                } else if (checkboxEditStatusOff != null) {
-//                    pstm.setString(6, "off");
-//                }
-//
-//                pstm.executeUpdate();
-//
-//                // Atualiza a listagem de registros e volta para panelRead
-//                readAll();
-//                openCard("panelRead");
-//
-//            } catch (SQLException error) {
-//                PopUps.showError("Main.deleteData\n" + error);
-//            } finally {
-//                dbConnection.dbClose(conn, pstm, null);
-//            }
-//        }
-//    }
-//
-//    public void exitApp() {
-//        int dialogButton = PopUps.showConfirm("Saindo...", "Sair do aplicativo?");
-//
-//        if (dialogButton == 0) {
-//            System.exit(0);
-//        }
-//    }
-//
-//    public void formRefresh(int dataId) {
-//        try {
-//            String sql = "SELECT * FROM game WHERE g_id = ? AND g_status != 'del'";
-//
-//            // Conecta ao banco de dados
-//            conn = dbConnection.connect();
-//
-//            // Prepara, filtra e sanitiza o SQL e dps executa
-//            pstm = conn.prepareStatement(sql);
-//
-//            // Substitui o "?" na query pelo Id do registro
-//            pstm.setInt(1, dataId);
-//
-//            // Executa a query e armazena resultado(s) em res
-//            res = pstm.executeQuery();
-//            res.next();
-//
-//            txtEditId.setText(res.getString("g_id"));
-//            txtEditType.setText(res.getString("g_type"));
-//            txtEditName.setText(res.getString("g_name"));
-//            txtEditPlatform.setText(res.getString("g_platform"));
-//            txtEditMedia.setText(res.getString("g_media"));
-//            txtEditSinopse.setText(res.getString("g_sinopse"));
-//
-//            // Verifica o status do registro e seleciona o checkbox respectivo
-//            if (!res.getString("g_status").equals("on")) {
-//                checkboxEditStatusOff.setSelected(true);
-//            } else {
-//                checkboxEditStatusOn.setSelected(true);
-//            }
-//        } catch (SQLException error) {
-//            PopUps.showError("Main.refresh\n" + error);
-//        } finally {
-//            dbConnection.dbClose(conn, pstm, res);
-//        }
-//    }
-//
-//    public void formClear() {
-//        txtCreateType.setText("");
-//        txtCreateName.setText("");
-//        txtCreatePlatform.setText("");
-//        txtCreateMedia.setText("");
-//        txtCreateSinopse.setText("");
-//    }
-//
-//    public void createData() {
-//        try {
-//            String sql = "INSERT INTO game(g_date, g_type, g_name, g_platform, g_media, g_sinopse, g_status) VALUES (?, ?, ?, ?, ?, ?, 'on')";
-//
-//            // Conecta ao banco de dados
-//            conn = dbConnection.connect();
-//
-//            // Prepara, filtra e sanitiza o sql e depois executa a query
-//            pstm = conn.prepareStatement(sql);
-//
-//            // Captar a data e a hora do registro
-//            String localDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
-//
-//            // Substitui os "?" no SQL pelos valores corretos
-//            pstm.setString(1, localDate);
-//            pstm.setString(2, txtCreateType.getText());
-//            pstm.setString(3, txtCreateName.getText());
-//            pstm.setString(4, txtCreatePlatform.getText());
-//            pstm.setString(5, txtCreateMedia.getText());
-//            pstm.setString(6, txtCreateSinopse.getText());
-//
-//            // Executa, filta e sanitiza o sql e depois executa a query
-//            pstm.executeUpdate();
-//
-//            // Limpa os campos
-//            formClear();
-//
-//            // Atualiza a listagem de registros e volta para o panelRead
-//            readAll();
-//            openCard("panelRead");
-//
-//        } catch (SQLException error) {
-//            PopUps.showError("Main.CreateData\n" + error);
-//        } finally {
-//            dbConnection.dbClose(conn, pstm, null);
-//        }
-//    }
-//            int selected = tableRead.getSelectedRow();
-//        if (selected < 0) {
-//            PopUps.showAlert("Selecione um item primeiro.");
-//        } else {
-//            // Capta o id da linha selecionada
-//            int selectedId = (int) tableRead.getModel().getValueAt(selected, 0);
-//            deleteData(selectedId);
-//        }
 }
