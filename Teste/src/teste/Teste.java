@@ -1,14 +1,8 @@
-package trecos.trecostest;
+package teste;
 
-import trecos.exercicios.Calculator;
-import trecos.exercicios.DateToFormat;
-import trecos.exercicios.MultiTable;
-import trecos.exercicios.Validator;
-
-public class TrecosTest {
+public class Teste {
 
     public static void main(String[] args) {
-
         Calculator.sum(-2, -2);
         Calculator.sum(-2, 2);
         Calculator.sub(10, -10);
@@ -34,6 +28,5 @@ public class TrecosTest {
         Validator.isURL("https://teste");
         Validator.isCPF("000.000.000-00");
         System.out.println("-".repeat(100));
-        
     }
 }
