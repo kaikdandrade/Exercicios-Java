@@ -30,4 +30,3 @@ public class Teste {
         System.out.println("-".repeat(100));
     }
 }
- 
