@@ -22,30 +22,5 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
-<<<<<<< HEAD
-/TestesJUnit/target/
-/TestesJUnit/nbproject/
-/Dice/target/
-/TrecosTest/target/
-/Temperature/target/
-/Temperature/nbproject/
-/exerciseOne/nbproject/
-/exerciseOne/target/
-/Dice/nbproject/
-/Aval/nbproject/private/
-/Aval/build/
-/ExerciseOne/target/
-/Aval/dist/
-/Prova/nbproject/
-/Prova/target/
-/AnoBissexto/nbproject/
-/AnoBissexto/target/
-/TestePalindromo/target/
-/TestePalindromo/nbproject/
-/MatematicaMaluca/nbproject/
-/MatematicaMaluca/target/
-=======
-/TrecosTest/nbproject/
-/Teste/build/
-/Teste/nbproject/private/
->>>>>>> 10/02/2023
+
+**/nbproject
