@@ -1,2 +1,1 @@
-# Exercícios Java
- Socorro!
+# Exercícios em Java
